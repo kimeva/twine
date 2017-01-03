@@ -14,7 +14,6 @@ module Twine
         'en-rGB' => 'en-UK',
         'in' => 'id',
         'nb' => 'no'
-        # TODO: spanish
       ]
 
       def format_name
