@@ -1,8 +1,12 @@
 require 'Nokogiri'
+require 'rexml/document'
+require 'Nokogiri'
 
 module Twine
   module Formatters
     class Apple < Abstract
+      include Twine::Placeholders
+
       def format_name
         'apple'
       end
@@ -226,7 +230,7 @@ module Twine
           end
 
           if value != nil && main_file_contains_key
-            out_file.puts(format_plural_key_value(definition.key, format_value_plural(value.dup)))
+            out_file.puts(format_plural_key_value(definition.key, format_value(format_value_plural(value.dup))))
           end
         end
 
@@ -316,9 +320,53 @@ module Twine
         escape_quotes(key)
       end
 
+      def escape_value(value)
+        # escape double and single quotes, & signs and tags
+        value = escape_quotes(value)
+        value.gsub!("'", "\\\\'")
+        value.gsub!(/&/, '&amp;')
+        value.gsub!('<', '&lt;')
+
+        # escape non resource identifier @ signs (http://developer.android.com/guide/topics/resources/accessing-resources.html#ResourcesFromXml)
+        resource_identifier_regex = /@(?!([a-z\.]+:)?[a-z+]+\/[a-zA-Z_]+)/   # @[<package_name>:]<resource_type>/<resource_name>
+        value.gsub(resource_identifier_regex, '\@')
+
+        value.gsub('strong>', 'b>')
+      end
+
       def format_value(value)
-        text = escape_quotes(value)
-        text.gsub("b>", "strong>")
+        value = value.dup
+
+        # If there are double quotes, we want to return the string verbatim
+        # Definition scrubs the double quotes to single in twine_file.rb line 178
+        if value.include? "`"
+          value = value[1..-2] if value[0] == '`' && value[-1] == '`'
+          return value
+        end
+
+        # capture xliff tags and replace them with a placeholder
+        xliff_tags = []
+        value.gsub! /<xliff:g.+?<\/xliff:g>/ do
+          xliff_tags << $&
+          'TWINE_XLIFF_TAG_PLACEHOLDER'
+        end
+
+        # escape everything outside xliff tags
+        value = escape_value(value)
+
+        # put xliff tags back into place
+        xliff_tags.each do |xliff_tag|
+          # escape content of xliff tags
+          xliff_tag.gsub! /(<xliff:g.*?>)(.*)(<\/xliff:g>)/ do "#{$1}#{escape_value($2)}#{$3}" end
+          value.sub! 'TWINE_XLIFF_TAG_PLACEHOLDER', xliff_tag
+        end
+
+        # convert placeholders (e.g. %@ -> %s)
+        value = convert_placeholders_from_twine_to_android(value)
+
+        # replace beginning and end spaces with \u0020. Otherwise Android strips them.
+        value.gsub(/\A *| *\z/) { |spaces| '\u0020' * spaces.length }
+        value.gsub('%#s', '%#@')
       end
 
       def format_value_plural(value)
