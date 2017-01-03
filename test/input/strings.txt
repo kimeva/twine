@@ -13,3 +13,7 @@
   [GREETINGS_HELLO]
     en = Hello '%s' and '%s'
     zh-HK = '%s' 你好 '%s'
+  [GREETINGS_GOOD_AFTERNOON]
+    en = Good Afternoon
+    zh-HK = 下午好
+
