@@ -8,15 +8,6 @@ module Twine
     class JSON < Abstract
       include Twine::Placeholders
 
-      LANG_MAPPINGS = Hash[
-        'zh-rCN' => 'zh-Hans',
-        'zh-rHK' => 'zh-Hant',
-        'en-rGB' => 'en-UK',
-        'in' => 'id',
-        'nb' => 'no'
-        # TODO: spanish
-      ]
-
       def format_name
         'json'
       end
@@ -26,7 +17,7 @@ module Twine
       end
 
       def can_handle_directory?(path)
-        Dir.entries(path).any? { |item| /^values.*$/.match(item) }
+        Dir.entries(path).any? { |item| /^.+\.strings$/.match(item) }
       end
 
       def can_handle_file?(path)
@@ -41,18 +32,9 @@ module Twine
       def determine_language_given_path(path)
         path_arr = path.split(File::SEPARATOR)
         path_arr.each do |segment|
-          if segment == 'values'
-            return 'en'
-          else
-            # The language is defined by a two-letter ISO 639-1 language code, optionally followed by a two letter ISO 3166-1-alpha-2 region code (preceded by lowercase "r").
-            # see http://developer.android.com/guide/topics/resources/providing-resources.html#AlternativeResources
-            match = /^values-([a-z]{2}(-r[a-z]{2})?)$/i.match(segment)
-            if match
-              lang = match[1]
-              lang = LANG_MAPPINGS.fetch(lang, lang)
-              lang.sub!('-r', '-')
-              return lang
-            end
+          match = /^strings-(.+)$/.match(segment)
+          if match
+            return match[1]
           end
         end
 
@@ -254,8 +236,7 @@ module Twine
         value.gsub!(/&/, '&amp;')
         value.gsub!('<', '&lt;')
 
-        # escape non resource identifier @ signs (http://developer.android.com/guide/topics/resources/accessing-resources.html#ResourcesFromXml)
-        resource_identifier_regex = /@(?!([a-z\.]+:)?[a-z+]+\/[a-zA-Z_]+)/   # @[<package_name>:]<resource_type>/<resource_name>
+        resource_identifier_regex = /@(?!([a-z\.]+:)?[a-z+]+\/[a-zA-Z_]+)/
         value.gsub(resource_identifier_regex, '\@')
 
         value.gsub('strong>', 'b>')
@@ -267,7 +248,6 @@ module Twine
         # convert placeholders (e.g. %@ -> %s)
         value = convert_placeholders_from_twine_to_android(value)
         
-        # replace beginning and end spaces with \u0020. Otherwise Android strips them.
         value.gsub(/\A *| *\z/) { |spaces| '\u0020' * spaces.length }
       end
 
