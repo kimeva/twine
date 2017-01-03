@@ -31,6 +31,7 @@ module Twine
   require 'twine/formatters/abstract'
   require 'twine/formatters/android'
   require 'twine/formatters/apple'
+  require 'twine/formatters/json'
   require 'twine/runner'
   require 'twine/version'
 end

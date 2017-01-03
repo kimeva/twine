@@ -74,13 +74,13 @@ module Twine
         raise Twine::Error.new "Could not determine format given the contents of #{@options[:output_path]}"
       end
 
-      file_name = @options[:file_name] || formatter.default_file_name
       if @options[:create_folders]
         @twine_file.language_codes.each do |lang|
           output_path = File.join(@options[:output_path], formatter.output_path_for_language(lang))
 
           FileUtils.mkdir_p(output_path)
 
+          file_name = determine_filename(formatter, lang)
           file_path = File.join(output_path, file_name)
 
           output = formatter.format_file(lang)
@@ -103,7 +103,8 @@ module Twine
           next unless lang
 
           language_found = true
-
+          
+          file_name = determine_filename(formatter, lang)
           file_path = File.join(output_path, file_name)
           output = formatter.format_file(lang)
           unless output
@@ -211,6 +212,14 @@ module Twine
 
       output_path = @options[:output_path] || @options[:twine_file]
       write_twine_data(output_path)
+    end
+
+    def determine_filename(formatter, lang)
+      if @options[:format] == "json"
+        return @options[:file_name] || formatter.default_file_name(lang)
+      else
+        return @options[:file_name] || formatter.default_file_name
+      end
     end
 
     def validate_twine_file
