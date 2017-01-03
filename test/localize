@@ -1,0 +1,4 @@
+#!/bin/sh
+BASEDIR=$(dirname $0)
+ruby -rubygems -I $BASEDIR/../lib $BASEDIR/../bin/twine $@ "generate-all-localization-files" "./test/input/strings.txt" "./test/output/ios/" "--format" "apple" "--create-folders"
+ruby -rubygems -I $BASEDIR/../lib $BASEDIR/../bin/twine $@ "generate-all-localization-files" "./test/input/strings.txt" "./test/output/android/" "--format" "android" "--create-folders"
