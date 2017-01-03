@@ -60,10 +60,12 @@ module Twine
       end
 
       def output_path_for_language(lang)
-        if lang == 'en'
-          "values"
+        langStr = "values-"
+        langArr = lang.split('-')
+        if langArr.length > 1
+          return "values-#{langArr[0]}-r#{langArr[1]}"
         else
-          "values-" + (LANG_MAPPINGS.key(lang) || lang)
+          return "values-#{lang}"
         end
       end
 
