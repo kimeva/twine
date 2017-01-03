@@ -1,15 +1,15 @@
 [[n_windows]]
   [n_windows__one]
     ios = %#@n_windows@
-    en = %d window
-    zh-HK = %d 窗口
+    en = %d window for %s
+    zh-HK = %d 窗口 %s
   [n_windows__other]
     ios = %#@n_windows@
-    en = %d windows
-    zh-HK = %d 窗戶
+    en = %d windows for %s
+    zh-HK = %d 窗戶 %s
 
 [[Uncategorized]]
   [n_windows]
   [GREETINGS_HELLO]
-    en = Hello
-    zh-HK = 你好
+    en = Hello '%s' and '%s'
+    zh-HK = '%s' 你好 '%s'
