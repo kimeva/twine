@@ -1,0 +1,15 @@
+[[n_windows]]
+  [n_windows__one]
+    ios = %#@n_windows@
+    en = %d window
+    zh-HK = %d 窗口
+  [n_windows__other]
+    ios = %#@n_windows@
+    en = %d windows
+    zh-HK = %d 窗戶
+
+[[Uncategorized]]
+  [n_windows]
+  [GREETINGS_HELLO]
+    en = Hello
+    zh-HK = 你好
