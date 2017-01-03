@@ -327,8 +327,7 @@ module Twine
         value.gsub!(/&/, '&amp;')
         value.gsub!('<', '&lt;')
 
-        # escape non resource identifier @ signs (http://developer.android.com/guide/topics/resources/accessing-resources.html#ResourcesFromXml)
-        resource_identifier_regex = /@(?!([a-z\.]+:)?[a-z+]+\/[a-zA-Z_]+)/   # @[<package_name>:]<resource_type>/<resource_name>
+        resource_identifier_regex = /@(?!([a-z\.]+:)?[a-z+]+\/[a-zA-Z_]+)/
         value.gsub(resource_identifier_regex, '\@')
 
         value.gsub('strong>', 'b>')
@@ -364,7 +363,6 @@ module Twine
         # convert placeholders (e.g. %@ -> %s)
         value = convert_placeholders_from_twine_to_android(value)
 
-        # replace beginning and end spaces with \u0020. Otherwise Android strips them.
         value.gsub(/\A *| *\z/) { |spaces| '\u0020' * spaces.length }
         value.gsub('%#s', '%#@')
       end
