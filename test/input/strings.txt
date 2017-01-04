@@ -3,17 +3,27 @@
     ios = %#@n_windows@
     en = %d window for %s
     zh-HK = %d 窗口 %s
+    tags = ios,android,web
   [n_windows__other]
     ios = %#@n_windows@
     en = %d windows for %s
     zh-HK = %d 窗戶 %s
+    tags = ios,android,web
 
 [[Uncategorized]]
   [n_windows]
+    en = %d window for %s
+    zh-HK = %d 窗口 %s
+    comment = Test
+    tags = ios,android
   [GREETINGS_HELLO]
     en = Hello '%s' and '%s'
     zh-HK = '%s' 你好 '%s'
+    comment = A friendly greeting.
+    tags = ios,android,web
   [GREETINGS_GOOD_AFTERNOON]
     en = Good Afternoon
     zh-HK = 下午好
+    comment = A greeting done during the afternoon.
+    tags = ios,android,web
 
