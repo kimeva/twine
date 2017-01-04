@@ -14,7 +14,7 @@
   [n_windows]
     en = %d window for %s
     zh-HK = %d 窗口 %s
-    comment = Test
+    comment = 'n' number of windows.
     tags = ios,android
   [GREETINGS_HELLO]
     en = Hello '%s' and '%s'

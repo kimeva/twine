@@ -19,15 +19,90 @@ Make sure you run the `twine` executable at the root of the project as it proper
 
 Twine stores everything in a single file, the Twine data file. The format of this file is a slight variant of the [Git][git] config file format, which itself is based on the old [Windows INI file][INI] format.
 
-The entire file is broken up into two main sections, which are created by placing the section name between two pairs of square brackets.
+The entire file is broken up into two main sections, which are created by placing the section name between two pairs of square brackets. Each grouping section contains N definitions. These definitions start with the key placed within a single pair of square brackets. It then contains a number of key-value pairs, including a comment, a comma-separated list of tags, and all of the translations.
 
-The entire file is broken up into sections, which are created by placing the section name between two pairs of square brackets. Sections are optional, but they are the recommended way of grouping your definitions into smaller, more manageable chunks.
+## Plural Formatting
 
-Each grouping section contains N definitions. These definitions start with the key placed within a single pair of square brackets. It then contains a number of key-value pairs, including a comment, a comma-separated list of tags and all of the translations.
+To distinguish plural resources from regular resources, the twine file is separated into two types of sections:
+
+* Uncategorized encompasses all strings that are not pluralized.
+* Plural Categories are the rest of the categories, where each section is one plural set.
+
+To illustrate this:
+
+```ini
+	[[n_years]]
+		[n_years__one]
+			en = %d year
+			ios = %#@n_years@
+		[n_years__other]
+			en = %d years
+			ios = %#@n_years@
+
+	[[Uncategorized]]
+		[hello_world]
+			en = Hello World!
+		[n_years]
+			en = %#@n_years@
+```
+
+`n_years` is the section name and the key of the plural.
+
+## The `__` Notation
+
+`n_years__one` uses the double underscores (`__`) to separate the plural value key out. Twine will look for `__` to find the plural value key to format the plurals properly. So the plural will look like this in Android and iOS format:
+
+```xml
+	<plurals name="n_years">
+		<item quantity="one">%d year</item>
+		<item quantity="other">%d years</item>
+	</plurals>
+```
+
+```xml
+	<key>n_years</key>
+		<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@n_years@</string>
+		<key>n_years</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d year</string>
+			<key>other</key>
+			<string>%d years</string>
+		</dict>
+	</dict>
+```
+
+## The `ios` Field
+
+Looking closer at our example, another feature to take note of is the `ios` field:
+
+```ini
+	[[n_years]]
+		[n_years__one]
+			en = %d year
+			ios = %#@n_years@
+		[n_years__other]
+			en = %d years
+			ios = %#@n_years@
+
+	[[Uncategorized]]
+		[hello_world]
+			en = Hello World!
+		[n_years]
+			en = %#@n_years@
+```
+
+iOS plural resources have another key for their plural resources called the `NSStringLocalizedFormatKey`. This has a snake cased string surrounded by `%#@key_here@` and this key must be included in the main `Localizable.strings` file with the same key of the entire plural as its key. (ie. `n_years = %#@n_years@;`) This is why `ios = %#@key_here@` was introduced and you'll notice it'll also be a definition under `Uncategorized` because of iOS resource specifications.
 
 ### Placeholders
 
-Twine supports [`printf` style placeholders][printf] with one peculiarity: `@` is used for strings instead of `s`. This is because Twine started out as a tool for iOS and OS X projects.
+Twine supports [`printf` style placeholders][printf].
 
 ### Tags
 
@@ -39,46 +114,37 @@ When generating a localization file, you can specify which definitions should be
 
 Whitepace in this file is mostly ignored. If you absolutely need to put spaces at the beginning or end of your translated string, you can wrap the entire string in a pair of `` ` `` characters. If your actual string needs to start *and* end with a grave accent, you can wrap it in another pair of `` ` `` characters. See the example, below.
 
-### References
-
-If you want a definition to inherit the values of another definition, you can use a reference. Any property not specified for a definition will be taken from the reference.
-
 ### Example
 
 ```ini
-	[[General]]
-		[yes]
-			en = Yes
-			es = Sí
-			fr = Oui
-			ja = はい
-		[no]
-			en = No
-			fr = Non
-			ja = いいえ
+	[[n_windows]]
+		[n_windows__one]
+			ios = %#@n_windows@
+			en = %d window for %s
+			zh-HK = %d 窗口 %s
+			tags = ios,android,web
+		[n_windows__other]
+			ios = %#@n_windows@
+			en = %d windows for %s
+			zh-HK = %d 窗戶 %s
+			tags = ios,android,web
 
-	[[Errors]]
-		[path_not_found_error]
-			en = The file '%@' could not be found.
-			tags = app1,app6
-			comment = An error describing when a path on the filesystem could not be found.
-		[network_unavailable_error]
-			en = The network is currently unavailable.
-			tags = app1
-			comment = An error describing when the device can not connect to the internet.
-		[dismiss_error]
-			ref = yes
-			en = Dismiss
-
-	[[Escaping Example]]
-		[list_item_separator]
-			en = `, `
-			tags = mytag
-			comment = A string that should be placed between multiple items in a list. For example: Red, Green, Blue
-		[grave_accent_quoted_string]
-			en = ``%@``
-			tags = myothertag
-			comment = This string will evaluate to `%@`.
+	[[Uncategorized]]
+		[n_windows]
+			en = %d window for %s
+			zh-HK = %d 窗口 %s
+			comment = 'n' number of windows.
+			tags = ios,android
+		[GREETINGS_HELLO]
+			en = Hello '%s' and '%s'
+			zh-HK = '%s' 你好 '%s'
+			comment = A friendly greeting.
+			tags = ios,android,web
+		[GREETINGS_GOOD_AFTERNOON]
+			en = Good Afternoon
+			zh-HK = 下午好
+			comment = A greeting done during the afternoon.
+			tags = ios,android,web
 ```
 
 ## Supported Output Formats
@@ -87,16 +153,12 @@ Twine currently supports the following output formats:
 
 * [iOS and OS X String Resources][applestrings] (format: apple)
 * [Android String Resources][androidstrings] (format: android)
-* [Gettext PO Files][gettextpo] (format: gettext)
-* [jquery-localize Language Files][jquerylocalize] (format: jquery)
-* [Django PO Files][djangopo] (format: django)
-* [Tizen String Resources][tizen] (format: tizen)
-
-If you would like to enable Twine to create localization files in another format, read the wiki page on how to create an appropriate formatter.
+* [JSON] (format: json)
 
 ## Usage
 
 	Usage: twine COMMAND TWINE_FILE [INPUT_OR_OUTPUT_PATH] [--lang LANG1,LANG2...] [--tags TAG1,TAG2,TAG3...] [--format FORMAT]
+	Example: `twine generate-all-localization-files ./input/strings.txt ./output/web --lang zh-HK,en-SG --tags web --format json --create-folders`
 
 ### Commands
 
@@ -154,46 +216,11 @@ The easiest way to create your first Twine data file is to run the [`consume-all
 	$ touch twine.txt
 	$ twine consume-all-localization-files twine.txt Resources/Locales --developer-language en --consume-all --consume-comments
 
-## Twine and Your Build Process
+### Other Arguments
 
-### Xcode
-
-It is easy to incorporate Twine right into your iOS and OS X app build processes.
-
-1. In your project folder, create all of the `.lproj` directories that you need. It does not really matter where they are. We tend to put them in `Resources/Locales/`.
-2. Run the [`generate-all-localization-files`](#generate-all-localization-files) command to create all of the `.strings` files you need in these directories. For example,
-
-		$ twine generate-all-localization-files twine.txt Resources/Locales/ --tags tag1,tag2
-
-	Make sure you point Twine at your data file, the directory that contains all of your `.lproj` directories, and the tags that describe the definitions you want to use for this project.
-3. Drag the `Resources/Locales/` directory to the Xcode project navigator so that Xcode knows to include all of these `.strings` files in your build.
-4. In Xcode, navigate to the "Build Phases" tab of your target.
-5. Click on the "Add Build Phase" button and select "Add Run Script".
-6. Drag the new "Run Script" build phase up so that it runs earlier in the build process. It doesn't really matter where, as long as it happens before the resources are copied to your bundle.
-7. Edit your script to run the exact same command you ran in step (2) above.
-
-Now, whenever you build your application, Xcode will automatically invoke Twine to make sure that your `.strings` files are up-to-date.
-
-### Android Studio/Gradle
-
-Add the following task at the top level in app/build.gradle:
-```
-task generateLocalizations {
-    String script = 'if hash twine 2>/dev/null; then twine generate-localization-file twine.txt ./src/main/res/values/generated_strings.xml; fi'
-    exec {
-        executable "sh"
-        args '-c', script
-    }
-}
-```
-
-Now every time you build your app the localization files are generated from the Twine file.
-
-
-## User Interface
-
-* [Twine TextMate 2 Bundle](https://github.com/mobiata/twine.tmbundle) — This [TextMate 2](https://github.com/textmate/textmate) bundle will make it easier for you to work with Twine files. In particular, it lets you use code folding to easily collapse and expand both definitions and sections.
-* [twine_ui](https://github.com/Daij-Djan/twine_ui) — A user interface for Twine written by [Dominik Pich](https://github.com/Daij-Djan/). Consider using this if you would prefer to use Twine without dropping to a command line.
+| Command | Description |
+| --- | --- |
+| `--[no-]create-folders` | When running the generate-all-localization-files command, this flag may be used to create output folders for all languages if they  don't exist yet. As a result all languages will be exported, not only the ones where an output folder already exists.|
 
 ## Extending Twine
 
@@ -214,6 +241,7 @@ Many thanks to all of the contributors to the Twine project, including:
 * [Sebastian Ludwig](https://github.com/sebastianludwig)
 * [Sergey Pisarchik](https://github.com/SergeyPisarchik)
 * [Shai Shamir](https://github.com/pichirichi)
+* [500px](https://github.com/500px)
 
 
 [rubyzip]: http://rubygems.org/gems/rubyzip
