@@ -153,13 +153,13 @@ Twine currently supports the following output formats:
 
 * [iOS and OS X String Resources][applestrings] (format: apple)
 * [Android String Resources][androidstrings] (format: android)
-* [JSON] (format: json)
+* JSON (format: json)
 
 ## Usage
 
 Usage: twine COMMAND TWINE_FILE [INPUT_OR_OUTPUT_PATH] [--lang LANG1,LANG2...] [--tags TAG1,TAG2,TAG3...] [--format FORMAT]
 	
-$ twine generate-all-localization-files ./input/strings.txt ./output/web --lang zh-HK,en-SG --tags web --format json --create-folders
+	$ twine generate-all-localization-files ./input/strings.txt ./output/web --lang zh-HK,en-SG --tags web --format json --create-folders
 
 ### Commands
 
@@ -219,9 +219,9 @@ The easiest way to create your first Twine data file is to run the [`consume-all
 
 ### Other Arguments
 
-| Argument                | Description |
-| :---------------------- | --- |
-| `--[no-]create-folders` | When running the generate-all-localization-files command, this flag may be used to create output folders for all languages if they  don't exist yet. As a result all languages will be exported, not only the ones where an output folder already exists.|
+#### `--[no-]create-folders` 
+
+When running the generate-all-localization-files command, this flag may be used to create output folders for all languages if they  don't exist yet. As a result all languages will be exported, not only the ones where an output folder already exists.|
 
 ## Extending Twine
 
