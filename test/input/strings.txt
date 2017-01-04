@@ -1,29 +1,69 @@
 [[n_windows]]
   [n_windows__one]
-    ios = %#@n_windows@
-    en = %d window for %s
-    zh-HK = %d 窗口 %s
     tags = ios,android,web
+    ios = %#@windows@chairs
+    en = %d window
+    zh-HK = %d 窗口
   [n_windows__other]
-    ios = %#@n_windows@
-    en = %d windows for %s
-    zh-HK = %d 窗戶 %s
     tags = ios,android,web
+    ios = %#@windows@
+    en = %d windows
+    zh-HK = %d 窗戶
+  [x_chairs__one]
+    tags = ios,android,web
+    ios = %#@windows@chairs
+    en = %d chairs
+    zh-HK = %d 窗戶
+
+[[n_boards]]
+  [n_boards__one]
+    tags = ios
+    ios = %#@boards@
+    en = %d board
+  [n_boards__other]
+    tags = ios
+    ios = %#@boards@
+    en = %d boards
+
+[[n_pins]]
+  [n_pins__one]
+    tags = ios
+    ios = %#@pins@
+    en = %d pin
+  [n_pins__other]
+    tags = ios
+    ios = %#@pins@
+    en = %d pins
 
 [[Uncategorized]]
+  [n_test]
+    tags = ios
+    comment = test
+    en = %1$#@rooms@ %2$@ %3$#@type@
+  [n_boards]
+    tags = ios
+    comment = 'n' number of boards.
+    en = %#@n_boards@
+  [n_pins]
+    tags = ios
+    comment = 'n' number of pins.
+    en = %#@n_pins@
   [n_windows]
-    en = %d window for %s
-    zh-HK = %d 窗口 %s
-    comment = 'n' number of windows.
     tags = ios,android
+    comment = 'n' number of windows.
+    en = %#@n_windows@
+    zh-HK = %#@n_windows@
   [GREETINGS_HELLO]
+    tags = ios,android,web
+    comment = A friendly greeting.
     en = Hello '%s' and '%s'
     zh-HK = '%s' 你好 '%s'
-    comment = A friendly greeting.
-    tags = ios,android,web
   [GREETINGS_GOOD_AFTERNOON]
+    tags = ios,android,web
+    comment = A greeting done during the afternoon.
     en = Good Afternoon
     zh-HK = 下午好
-    comment = A greeting done during the afternoon.
-    tags = ios,android,web
-
+  [ACTIVITY_SUMMARY]
+    tags = ios
+    comment = {name} has {x boards} and {y pins}.
+    en = {name} has {board_count} and {pin_count}.
