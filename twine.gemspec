@@ -2,7 +2,7 @@ $LOAD_PATH.unshift 'lib'
 require 'twine/version'
 
 Gem::Specification.new do |s|
-  s.name         = "twine"
+  s.name         = "twine-qanvast"
   s.version      = Twine::VERSION
   s.date         = Time.now.strftime('%Y-%m-%d')
   s.summary      = "Manage strings and their translations for your iOS, Android and other projects."
@@ -29,7 +29,9 @@ Gem::Specification.new do |s|
   s.description  = <<desc
   Twine is a command line tool for managing your strings and their translations.
 
-  It is geared toward Mac OS X, iOS, and Android developers.
+  Credits go to to twine@mobiata.com.
+
+  This is a modified version of Mobiata's twine that handles pluralization for iOS, Android, and Web string resources.
 desc
 
   s.post_install_message = "Twine command names have changed! Please check the documentation for their new names."
