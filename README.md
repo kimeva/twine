@@ -31,19 +31,19 @@ To distinguish plural resources from regular resources, the twine file is separa
 To illustrate this:
 
 ```ini
-	[[n_years]]
-		[n_years__one]
-			en = %d year
-			ios = %#@n_years@
-		[n_years__other]
-			en = %d years
-			ios = %#@n_years@
+[[n_years]]
+	[n_years__one]
+		en = %d year
+		ios = %#@n_years@
+	[n_years__other]
+		en = %d years
+		ios = %#@n_years@
 
-	[[Uncategorized]]
-		[hello_world]
-			en = Hello World!
-		[n_years]
-			en = %#@n_years@
+[[Uncategorized]]
+	[hello_world]
+		en = Hello World!
+	[n_years]
+		en = %#@n_years@
 ```
 
 `n_years` is the section name and the key of the plural.
@@ -53,29 +53,29 @@ To illustrate this:
 `n_years__one` uses the double underscores (`__`) to separate the plural value key out. Twine will look for `__` to find the plural value key to format the plurals properly. So the plural will look like this in Android and iOS format:
 
 ```xml
-	<plurals name="n_years">
-		<item quantity="one">%d year</item>
-		<item quantity="other">%d years</item>
-	</plurals>
+<plurals name="n_years">
+	<item quantity="one">%d year</item>
+	<item quantity="other">%d years</item>
+</plurals>
 ```
 
 ```xml
+<key>n_years</key>
+	<dict>
+	<key>NSStringLocalizedFormatKey</key>
+	<string>%#@n_years@</string>
 	<key>n_years</key>
-		<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@n_years@</string>
-		<key>n_years</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%d year</string>
-			<key>other</key>
-			<string>%d years</string>
-		</dict>
+	<dict>
+		<key>NSStringFormatSpecTypeKey</key>
+		<string>NSStringPluralRuleType</string>
+		<key>NSStringFormatValueTypeKey</key>
+		<string>d</string>
+		<key>one</key>
+		<string>%d year</string>
+		<key>other</key>
+		<string>%d years</string>
 	</dict>
+</dict>
 ```
 
 ### The `ios` Field
@@ -219,8 +219,8 @@ The easiest way to create your first Twine data file is to run the [`consume-all
 
 ### Other Arguments
 
-| Argument | Description |
-| ------ | --- |
+| Argument                | Description |
+| :---------------------- | --- |
 | `--[no-]create-folders` | When running the generate-all-localization-files command, this flag may be used to create output folders for all languages if they  don't exist yet. As a result all languages will be exported, not only the ones where an output folder already exists.|
 
 ## Extending Twine
