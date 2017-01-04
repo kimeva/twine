@@ -214,13 +214,6 @@ This command validates that the Twine data file can be parsed, contains no dupli
 
 	$ twine validate-twine-file /path/to/twine.txt
 
-## Creating Your First Twine Data File
-
-The easiest way to create your first Twine data file is to run the [`consume-all-localization-files`](#consume-all-localization-files) command. The one caveat is to first create a blank file to use as your starting point. Then, just point the `consume-all-localization-files` command at a directory in your project containing all of your localization files.
-
-	$ touch twine.txt
-	$ twine consume-all-localization-files twine.txt Resources/Locales --developer-language en --consume-all --consume-comments
-
 ### Other Arguments
 
 #### `--[no-]create-folders` 
