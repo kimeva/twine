@@ -157,9 +157,13 @@ Twine currently supports the following output formats:
 
 ## Usage
 
-	Usage: twine COMMAND TWINE_FILE [INPUT_OR_OUTPUT_PATH] [--lang LANG1,LANG2...] [--tags TAG1,TAG2,TAG3...] [--format FORMAT]
+```txt
+Usage: twine COMMAND TWINE_FILE [INPUT_OR_OUTPUT_PATH] [--lang LANG1,LANG2...] [--tags TAG1,TAG2,TAG3...] [--format FORMAT]
+```
 	
-	$ twine generate-all-localization-files ./input/strings.txt ./output/web --lang zh-HK,en-SG --tags web --format json --create-folders
+```txt
+$ twine generate-all-localization-files ./input/strings.txt ./output/web --lang zh-HK,en-SG --tags web --format json --create-folders
+```
 
 ### Commands
 
