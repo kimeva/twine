@@ -21,7 +21,7 @@ Twine stores everything in a single file, the Twine data file. The format of thi
 
 The entire file is broken up into two main sections, which are created by placing the section name between two pairs of square brackets. Each grouping section contains N definitions. These definitions start with the key placed within a single pair of square brackets. It then contains a number of key-value pairs, including a comment, a comma-separated list of tags, and all of the translations.
 
-## Plural Formatting
+### Plural Formatting
 
 To distinguish plural resources from regular resources, the twine file is separated into two types of sections:
 
@@ -48,7 +48,7 @@ To illustrate this:
 
 `n_years` is the section name and the key of the plural.
 
-## The `__` Notation
+### The `__` Notation
 
 `n_years__one` uses the double underscores (`__`) to separate the plural value key out. Twine will look for `__` to find the plural value key to format the plurals properly. So the plural will look like this in Android and iOS format:
 
@@ -78,24 +78,24 @@ To illustrate this:
 	</dict>
 ```
 
-## The `ios` Field
+### The `ios` Field
 
 Looking closer at our example, another feature to take note of is the `ios` field:
 
 ```ini
-	[[n_years]]
-		[n_years__one]
-			en = %d year
-			ios = %#@n_years@
-		[n_years__other]
-			en = %d years
-			ios = %#@n_years@
+[[n_years]]
+	[n_years__one]
+		en = %d year
+		ios = %#@n_years@
+	[n_years__other]
+		en = %d years
+		ios = %#@n_years@
 
-	[[Uncategorized]]
-		[hello_world]
-			en = Hello World!
-		[n_years]
-			en = %#@n_years@
+[[Uncategorized]]
+	[hello_world]
+		en = Hello World!
+	[n_years]
+		en = %#@n_years@
 ```
 
 iOS plural resources have another key for their plural resources called the `NSStringLocalizedFormatKey`. This has a snake cased string surrounded by `%#@key_here@` and this key must be included in the main `Localizable.strings` file with the same key of the entire plural as its key. (ie. `n_years = %#@n_years@;`) This is why `ios = %#@key_here@` was introduced and you'll notice it'll also be a definition under `Uncategorized` because of iOS resource specifications.
@@ -117,34 +117,34 @@ Whitepace in this file is mostly ignored. If you absolutely need to put spaces a
 ### Example
 
 ```ini
-	[[n_windows]]
-		[n_windows__one]
-			ios = %#@n_windows@
-			en = %d window for %s
-			zh-HK = %d 窗口 %s
-			tags = ios,android,web
-		[n_windows__other]
-			ios = %#@n_windows@
-			en = %d windows for %s
-			zh-HK = %d 窗戶 %s
-			tags = ios,android,web
+[[n_windows]]
+	[n_windows__one]
+		ios = %#@n_windows@
+		en = %d window for %s
+		zh-HK = %d 窗口 %s
+		tags = ios,android,web
+	[n_windows__other]
+		ios = %#@n_windows@
+		en = %d windows for %s
+		zh-HK = %d 窗戶 %s
+		tags = ios,android,web
 
-	[[Uncategorized]]
-		[n_windows]
-			en = %d window for %s
-			zh-HK = %d 窗口 %s
-			comment = 'n' number of windows.
-			tags = ios,android
-		[GREETINGS_HELLO]
-			en = Hello '%s' and '%s'
-			zh-HK = '%s' 你好 '%s'
-			comment = A friendly greeting.
-			tags = ios,android,web
-		[GREETINGS_GOOD_AFTERNOON]
-			en = Good Afternoon
-			zh-HK = 下午好
-			comment = A greeting done during the afternoon.
-			tags = ios,android,web
+[[Uncategorized]]
+	[n_windows]
+		en = %d window for %s
+		zh-HK = %d 窗口 %s
+		comment = 'n' number of windows.
+		tags = ios,android
+	[GREETINGS_HELLO]
+		en = Hello '%s' and '%s'
+		zh-HK = '%s' 你好 '%s'
+		comment = A friendly greeting.
+		tags = ios,android,web
+	[GREETINGS_GOOD_AFTERNOON]
+		en = Good Afternoon
+		zh-HK = 下午好
+		comment = A greeting done during the afternoon.
+		tags = ios,android,web
 ```
 
 ## Supported Output Formats
@@ -158,6 +158,7 @@ Twine currently supports the following output formats:
 ## Usage
 
 	Usage: twine COMMAND TWINE_FILE [INPUT_OR_OUTPUT_PATH] [--lang LANG1,LANG2...] [--tags TAG1,TAG2,TAG3...] [--format FORMAT]
+	
 	Example: `twine generate-all-localization-files ./input/strings.txt ./output/web --lang zh-HK,en-SG --tags web --format json --create-folders`
 
 ### Commands
@@ -218,8 +219,8 @@ The easiest way to create your first Twine data file is to run the [`consume-all
 
 ### Other Arguments
 
-| Command | Description |
-| --- | --- |
+| Argument | Description |
+| ------ | --- |
 | `--[no-]create-folders` | When running the generate-all-localization-files command, this flag may be used to create output folders for all languages if they  don't exist yet. As a result all languages will be exported, not only the ones where an output folder already exists.|
 
 ## Extending Twine
