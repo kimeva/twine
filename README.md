@@ -1,21 +1,15 @@
 # Twine
 
-Twine is a command line tool for managing your strings and their translations. These are all stored in a master text file and then Twine uses this file to import and export localization files in a variety of types, including iOS and Mac OS X `.strings` files, Android `.xml` files, gettext `.po` files, and [jquery-localize][jquerylocalize] `.json` files. This allows individuals and companies to easily share translations across multiple projects, as well as export localization files in any format the user wants.
+Twine is a command line tool for managing your strings and their translations. These are all stored in a master text file and then Twine uses this file to import and export localization files in a variety of types, including iOS and Mac OS X `.strings` files and Android `.xml` files. This allows individuals and companies to easily share translations across multiple projects, as well as export localization files in any format the user wants.
 
 ## Install
 
-### As a Gem
-
-Twine is most easily installed as a Gem.
-
-	$ gem install twine
-
 ### From Source
 
-You can also run Twine directly from source. However, it requires [rubyzip][rubyzip] in order to create and read standard zip files.
+You can run Twine directly from source. However, it requires [rubyzip][rubyzip] in order to create and read standard zip files.
 
 	$ gem install rubyzip
-	$ git clone git://github.com/mobiata/twine.git
+	$ git clone git://github.com/kimeva/twine.git
 	$ cd twine
 	$ ./twine --help
 
@@ -23,7 +17,11 @@ Make sure you run the `twine` executable at the root of the project as it proper
 
 ## Twine File Format
 
-Twine stores everything in a single file, the Twine data file. The format of this file is a slight variant of the [Git][git] config file format, which itself is based on the old [Windows INI file][INI] format. The entire file is broken up into sections, which are created by placing the section name between two pairs of square brackets. Sections are optional, but they are the recommended way of grouping your definitions into smaller, more manageable chunks.
+Twine stores everything in a single file, the Twine data file. The format of this file is a slight variant of the [Git][git] config file format, which itself is based on the old [Windows INI file][INI] format.
+
+The entire file is broken up into two main sections, which are created by placing the section name between two pairs of square brackets.
+
+The entire file is broken up into sections, which are created by placing the section name between two pairs of square brackets. Sections are optional, but they are the recommended way of grouping your definitions into smaller, more manageable chunks.
 
 Each grouping section contains N definitions. These definitions start with the key placed within a single pair of square brackets. It then contains a number of key-value pairs, including a comment, a comma-separated list of tags and all of the translations.
 
