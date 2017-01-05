@@ -9,11 +9,6 @@
     ios = %#@windows@
     en = %d windows
     zh-HK = %d 窗戶
-  [x_chairs__one]
-    tags = ios,android,web
-    ios = %#@windows@chairs
-    en = %d chairs
-    zh-HK = %d 窗戶
 
 [[n_boards]]
   [n_boards__one]
@@ -54,16 +49,27 @@
     en = %#@n_windows@
     zh-HK = %#@n_windows@
   [GREETINGS_HELLO]
-    tags = ios,android,web
+    tags = web
     comment = A friendly greeting.
-    en = Hello '%s' and '%s'
-    zh-HK = '%s' 你好 '%s'
+    en = Hello
+    zh-HK = 你好
+  [GREETINGS_GOOD_MORNING]
+    tags = web
+    comment = A greeting done during the morning.
+    en = Good Morning
+    zh-HK = 早上好
   [GREETINGS_GOOD_AFTERNOON]
-    tags = ios,android,web
+    tags = web
     comment = A greeting done during the afternoon.
     en = Good Afternoon
     zh-HK = 下午好
+  [GREETINGS_GOOD_EVENING]
+    tags = web
+    comment = A greeting done during the evening.
+    en = Good Evening
+    zh-HK = 晚上好
   [ACTIVITY_SUMMARY]
-    tags = ios
-    comment = {name} has {x boards} and {y pins}.
-    en = {name} has {board_count} and {pin_count}.
+    tags = ios,android,web
+    comment = {%1$s : name} has {%2$s : x boards} and {%3$s : y pins}.
+    en = %1$s has %2$s and %3$s.
+    zh-HK = %2$s and %3$s, %1$s has.
