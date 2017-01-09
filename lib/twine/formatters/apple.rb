@@ -7,6 +7,10 @@ module Twine
     class Apple < Abstract
       include Twine::Placeholders
 
+      LANG_MAPPINGS = Hash[
+        'zh-HK' => 'zh-Hant-HK'
+      ]
+
       def format_name
         'apple'
       end
@@ -50,10 +54,11 @@ module Twine
       end
 
       def output_path_for_language(lang)
+        "values-" + (LANG_MAPPINGS.key(lang) || lang)
         if lang == 'en'
           "Base.lproj"
         else
-          "#{lang}.lproj"
+          "#{LANG_MAPPINGS.fetch(lang, lang)}.lproj"
         end
       end
 
