@@ -59,12 +59,17 @@ module Twine
       end
 
       def output_path_for_language(lang)
-        langStr = "values-"
-        langArr = lang.split('-')
-        if langArr.length > 1
-          return "values-#{langArr[0]}-r#{langArr[1]}"
+        # English as the default language/locale
+        if lang == 'en'
+          "values"
         else
-          return "values-#{lang}"
+          langStr = "values-"
+          langArr = lang.split('-')
+          if langArr.length > 1
+            return "values-#{langArr[0]}-r#{langArr[1]}"
+          else
+            return "values-#{lang}"
+          end
         end
       end
 
