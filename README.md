@@ -6,6 +6,8 @@ Twine is a command line tool for managing your strings and their translations. T
 
 You may skip this section if you've already set up your Ruby environment.
 
+For installation procedures, [Homebrew](http://brew.sh/) is recommended.
+
 ### Setting up `rbenv`
 
 #### Installing `rbenv` and `ruby-build`
