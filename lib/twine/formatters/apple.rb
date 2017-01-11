@@ -169,25 +169,58 @@ module Twine
         return super(definition, lang) && !definition.translation_for_lang(lang).include?("`")
       end
 
+      def hasDefinitions (section, lang)
+        if section.definitions.size > 0
+          definition = section.definitions[0]
+          value = definition.translation_for_lang_or_nil(lang, @twine_file.language_codes[0])
+          if value != nil
+            return true
+          else
+            return false
+          end
+        else
+          return false
+        end
+      end
+
+      def hasPlurals (twine_file, lang)
+        sections = Array.new(twine_file.sections.size)
+        out_file = nil
+        for i in 0 ... twine_file.sections.size
+          section = twine_file.sections[i]
+          if !section.is_uncategorized
+            if hasDefinitions(section, lang)
+              out_file = File.open(plural_output_file_for_lang(lang), "w")
+              break;
+            end
+          end
+        end
+        return out_file
+      end
+
       def format_sections(twine_file, lang)
         first_plural = true
-        out_file = File.open(plural_output_file_for_lang(lang), "w")
-
         sections = Array.new(twine_file.sections.size)
+        out_file = hasPlurals(twine_file, lang)
+
         for i in 0 ... twine_file.sections.size
           section = twine_file.sections[i]
           if section.is_uncategorized
             sections[i] = format_section(section, lang)
           else
-            if first_plural
-              first_plural = false
-              out_file.puts(format_header_stringsdict)
+            if out_file != nil
+              if first_plural
+                first_plural = false
+                out_file.puts(format_header_stringsdict)
+              end
+              format_section_plural(section, lang, out_file)
             end
-            format_section_plural(section, lang, out_file)
           end
         end
-        out_file.puts(format_footer_stringsdict)
-        out_file.close
+        if out_file != nil
+          out_file.puts(format_footer_stringsdict)
+          out_file.close
+        end
         sections.compact.join("\n")
       end
 
@@ -214,33 +247,35 @@ module Twine
         plural_key = section.name
         main_file_contains_key = main_localizable_file_contains_key(plural_key)
 
-        for i in 0 ... section.definitions.size
-          definition = section.definitions[i]
-          value = definition.translation_for_lang_or_nil(lang, @twine_file.language_codes[0])
-          ios_localized_format_key = definition.ios_comment
+        if hasDefinitions(section, lang)
+          for i in 0 ... section.definitions.size
+            definition = section.definitions[i]
+            value = definition.translation_for_lang_or_nil(lang, @twine_file.language_codes[0])
+            ios_localized_format_key = definition.ios_comment
 
-          if ios_localized_format_key == nil
-            puts "[" + plural_key + "]"
+            if ios_localized_format_key == nil
+              puts "[" + plural_key + "]"
 
-            if main_file_contains_key
-              puts "Needs matching key in Localizable.strings"
-            else
-              puts  "This is an Android-only plural"
+              if main_file_contains_key
+                puts "Needs matching key in Localizable.strings"
+              else
+                puts  "This is an Android-only plural"
+              end
+              return
             end
-            return
+
+            if i == 0 && main_file_contains_key
+              out_file.puts(format_plural_start(plural_key, ios_localized_format_key.to_s))
+            end
+
+            if value != nil && main_file_contains_key
+              out_file.puts(format_plural_key_value(definition.key, format_value(format_value_plural(value.dup))))
+            end
           end
 
-          if i == 0 && main_file_contains_key
-            out_file.puts(format_plural_start(plural_key, ios_localized_format_key.to_s))
+          if main_file_contains_key
+            out_file.puts(format_plural_section_end)
           end
-
-          if value != nil && main_file_contains_key
-            out_file.puts(format_plural_key_value(definition.key, format_value(format_value_plural(value.dup))))
-          end
-        end
-
-        if main_file_contains_key
-          out_file.puts(format_plural_section_end)
         end
       end
 
@@ -318,7 +353,7 @@ module Twine
       end
 
       def format_comment(definition, lang)
-        "/* #{definition.comment.gsub('*/', '* /')} */\n" if definition.comment
+        return "/* #{definition.comment.gsub(/([$%])s/, '\1@')} */\n" if definition.comment
       end
 
       def format_key(key)
@@ -365,11 +400,9 @@ module Twine
           value.sub! 'TWINE_XLIFF_TAG_PLACEHOLDER', xliff_tag
         end
 
-        # convert placeholders (e.g. %@ -> %s)
-        value = convert_placeholders_from_twine_to_android(value)
-
+        # convert placeholders (e.g. %s -> %@)
         value.gsub(/\A *| *\z/) { |spaces| '\u0020' * spaces.length }
-        value.gsub('%#s', '%#@')
+        value.gsub(/([$%])s/, '\1@')
       end
 
       def format_value_plural(value)
