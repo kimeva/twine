@@ -8,8 +8,55 @@ You may skip this section if you've already set up your Ruby environment.
 
 ### Setting up `rbenv`
 
-	$ brew update
-	$ brew install rbenv
+#### Installing `rbenv` and `ruby-build`
+
+Update Homebrew:
+
+```
+$ brew update
+```
+
+Install `rbenv`:
+
+```
+$ brew install rbenv
+```
+
+Install `ruby-build`:
+
+```
+$ brew install ruby-build
+```
+
+Installing `ruby-build`, which provides the `rbenv install` command that simplifies the process of installing new Ruby versions.
+
+
+#### Initializing `rbenv`
+
+Open ~/.bash_profile:
+
+```
+touch ~/.bash_profile; open ~/.bash_profile
+```
+
+Append the following code in `~/.bash_profile`:
+
+```
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+```
+
+This allows `rbenv` to load automatically.
+
+#### Installing Ruby versions
+
+```
+# list all available versions:
+$ rbenv install -l
+
+# install a Ruby version:
+$ rbenv install 2.4.0
+```
 
 ## Install
 
