@@ -2,6 +2,15 @@
 
 Twine is a command line tool for managing your strings and their translations. These are all stored in a master text file and then Twine uses this file to import and export localization files in a variety of types, including iOS and Mac OS X `.strings` files and Android `.xml` files. This allows individuals and companies to easily share translations across multiple projects, as well as export localization files in any format the user wants.
 
+## Setting Up Ruby
+
+You may skip this section if you've already set up your Ruby environment.
+
+### Setting up `rbenv`
+
+	$ brew update
+	$ brew install rbenv
+
 ## Install
 
 ### From Source
