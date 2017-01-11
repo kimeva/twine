@@ -10,26 +10,18 @@ You may skip this section if you've already set up your Ruby environment.
 
 #### Installing `rbenv` and `ruby-build`
 
-Update Homebrew:
-
 ```
-$ brew update
-```
+# Update Homebrew:
+$ brew update && brew doctor
 
-Install `rbenv`:
-
-```
+# Install rbenv:
 $ brew install rbenv
-```
 
-Install `ruby-build`:
-
-```
+# Install ruby-build:
 $ brew install ruby-build
 ```
 
-Installing `ruby-build`, which provides the `rbenv install` command that simplifies the process of installing new Ruby versions.
-
+Installing `ruby-build` provides the `rbenv install` command that simplifies the process of installing new Ruby versions.
 
 #### Initializing `rbenv`
 
